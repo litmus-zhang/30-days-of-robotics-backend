@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  mainDB:
+    container_name: database
+    image: mysql:latest
+    ports:
+      - "2000:2000"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: root
+      MYSQL_DATABASE: robotics
+    restart: always
+    volumes:
+      - .db:/var/usr/bin
