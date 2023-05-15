@@ -81,18 +81,10 @@ func Login(c *gin.Context) {
 	return
 }
 func User(c *gin.Context) {
+	session := sessions.Default(c)
 	cookie, _ := c.Cookie("30_DOR")
-	//token, _ := jwt.ParseWithClaims(cookie, &jwt.StandardClaims{}, func(token *jwt.Token) (interface{}, error) {
-	//	return []byte(os.Getenv("JWT_SECRET")), nil
-	//})
-
-	//if err != nil || !token.Valid {
-	//	c.JSON(http.StatusUnauthorized, gin.H{"message": "Unauthorized"})
-	//	return
-	//}
-
-	//payload := token.Claims
-	c.JSON(200, gin.H{"payload": cookie})
+	id := session.Get("userID")
+	c.JSON(200, gin.H{"payload": cookie, "ID": id})
 }
 
 func RefreshToken(c *gin.Context) {
