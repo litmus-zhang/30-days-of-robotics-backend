@@ -25,11 +25,16 @@ func AppSetup() *gin.Engine {
 
 	base := r.Group("api/v1")
 	r.GET("/health", HealthChecker)
+
 	user := base.Group("users")
 	user.POST("/register", controller.Register)
 	user.POST("/login", controller.Login)
 	user.POST("/refresh", controller.RefreshToken)
 	user.GET("/user", controller.User)
+
+	adminTask := base.Group("admin/tasks")
+	adminTask.POST("create", controller.CreateTask)
+	adminTask.PUT("/:id", controller.UpdateTask)
 
 	return r
 }

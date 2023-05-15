@@ -16,11 +16,11 @@ func Register(c *gin.Context) {
 	var data map[string]string
 	err := c.ShouldBindJSON(&data)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	if data["confirm_password"] != data["password"] {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Password Mismatch"})
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Password Mismatch"})
 		return
 	}
 	type Result struct {
