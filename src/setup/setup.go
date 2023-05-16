@@ -39,7 +39,7 @@ func AppSetup() *gin.Engine {
 	authenticatedUser.GET("tasks", controller.ViewAllTask)
 	authenticatedUser.GET("tasks/:id", controller.ViewSingleTask)
 	authenticatedUser.POST("tasks/:id", controller.SubmitTask)
-	//authenticatedUser.POST("tasks/:id", controller.GradeTask)
+	authenticatedUser.PUT("tasks/:id", controller.GradeTask)
 
 	admin := base.Group("admin")
 	adminTask := admin.Group("tasks")

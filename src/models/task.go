@@ -4,15 +4,15 @@ import "strconv"
 
 var Tracks = []string{"Programming", "Design", "Electronics"}
 
-//type Grade int64
+type Grade int64
 
-//const (
-//	Poor Grade = (iota + 1) * 10
-//	Fair
-//	Good
-//	VeryGood
-//	Excellent
-//)
+const (
+	Poor Grade = (iota + 1) * 10
+	Fair
+	Good
+	VeryGood
+	Excellent
+)
 
 type Task struct {
 	ID          uint `json:"id"`

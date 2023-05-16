@@ -24,7 +24,7 @@ type UserTask struct {
 	Task       Task   `json:"-"`
 	Submission string `json:"submission"`
 	Submitted  bool   `json:"submitted"  gorm:"default:false"`
-	Grade      uint   `json:"grade"`
+	Grade      uint   `json:"grade" gorm:"default:0"`
 }
 
 func (user *User) SetPassword(password string) {
@@ -40,12 +40,18 @@ func (user *User) SetTrack(track string) {
 	user.TrackID, _ = strconv.Atoi(track)
 }
 
-func (usertask *UserTask) SetTaskID(id string) {
+func (userTask *UserTask) SetTaskID(id string) {
 	taskID, _ := strconv.Atoi(id)
-	usertask.TaskID = taskID
+	userTask.TaskID = taskID
 }
-func (usertask *UserTask) SetUserID(id interface{}) {
+func (userTask *UserTask) SetUserID(id interface{}) {
 	var userInterface interface{}
 	userInterface = id
-	usertask.UserID = userInterface.(int)
+	userTask.UserID = userInterface.(int)
+}
+
+func (userTask *UserTask) SetGrade(grade string) {
+	var _ error
+	userGrade, _ := strconv.Atoi(grade)
+	userTask.Grade = uint(userGrade)
 }
