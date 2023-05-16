@@ -8,6 +8,7 @@ import (
 	"github.com/bxcodec/faker/v4/pkg/slice"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 )
 
 func CreateTask(c *gin.Context) {
@@ -128,12 +129,7 @@ func GradeTask(c *gin.Context) {
 	taskID := c.Param("id")
 	userID := middlewares.GetUserId(c)
 	var userTask models.UserTask
-
-	tx := database.DB.Begin()
-
-	database.DB.Where("task_id = ? AND user_id = ?", taskID, userID).Find(&userTask)
-	userTask.SetGrade(data["grade"])
-	tx.UpdateColumn("grade", userTask.Grade)
-	tx.Commit()
-	c.JSON(200, userTask)
+	userGrade, _ := strconv.Atoi(data["grade"])
+	database.DB.Model(&userTask).Where("task_id = ? AND user_id = ?", taskID, userID).Update("grade", userGrade)
+	c.JSON(200, gin.H{"message": "User graded successfully"})
 }
