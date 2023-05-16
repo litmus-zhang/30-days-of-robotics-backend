@@ -44,6 +44,7 @@ func TestRegisterRoute(t *testing.T) {
 		"email":            "zhang@gmail.com",
 		"password":         "litmus1234",
 		"confirm_password": "litmus1234",
+		"track":            "1",
 	}
 
 	t.Run("Status 201 Created", func(t *testing.T) {

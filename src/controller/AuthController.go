@@ -2,6 +2,7 @@ package controller
 
 import (
 	"30-days-of-robotics-backend/src/database"
+	"30-days-of-robotics-backend/src/middlewares"
 	"30-days-of-robotics-backend/src/models"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-contrib/sessions"
@@ -38,6 +39,7 @@ func Register(c *gin.Context) {
 		Email:     data["email"],
 	}
 	user.SetPassword(data["password"])
+	user.SetTrack(data["track"])
 	database.DB.Create(&user)
 	c.JSON(http.StatusCreated, gin.H{"message": "User registration successful"})
 	return
@@ -76,17 +78,33 @@ func Login(c *gin.Context) {
 	session := sessions.Default(c)
 	session.Set("userID", sessionToken)
 	session.Set("token", tokenString)
-	session.Save()
+	err = session.Save()
+	if err != nil {
+		panic("Error saving session token")
+	}
 	c.JSON(http.StatusAccepted, gin.H{"message": "Login Successful"})
 	return
 }
 func User(c *gin.Context) {
-	session := sessions.Default(c)
-	cookie, _ := c.Cookie("30_DOR")
-	id := session.Get("userID")
-	c.JSON(200, gin.H{"payload": cookie, "ID": id})
+	id := middlewares.GetUserId(c)
+
+	var user models.User
+	database.DB.Where("id= ?", id).First(&user)
+	c.JSON(200, user)
 }
 
+func Logout(c *gin.Context) {
+	session := sessions.Default(c)
+
+	session.Delete("token")
+	session.Delete("userID")
+	err := session.Save()
+	if err != nil {
+		panic("Error saving session")
+	}
+	c.JSON(200, gin.H{"message": "Logout successful"})
+	return
+}
 func RefreshToken(c *gin.Context) {
 	token, _ := c.Cookie("jwt")
 	c.JSON(200, gin.H{"token": token})

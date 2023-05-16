@@ -19,7 +19,7 @@ func Connect() {
 }
 
 func AutoMigrate() {
-	err := DB.AutoMigrate(models.User{}, models.Task{}, models.UserTrack{})
+	err := DB.AutoMigrate(models.User{}, models.Task{}, models.Track{})
 	if err != nil {
 		log.Printf("Error connecting to Database: %v", err.Error())
 	}

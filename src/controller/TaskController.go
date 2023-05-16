@@ -28,9 +28,10 @@ func CreateTask(c *gin.Context) {
 	task := models.Task{
 		Title:       data["title"],
 		Description: data["description"],
-		Day:         data["day"],
-		Track:       data["track"],
 	}
+	task.SetDay(data["day"])
+	task.SetTrack(data["track"])
+
 	database.DB.Create(&task)
 
 	c.JSON(http.StatusCreated, gin.H{"message": "Task Created Successfully"})
@@ -49,11 +50,11 @@ func UpdateTask(c *gin.Context) {
 		return
 	}
 	task := models.Task{
-		Track:       data["track"],
-		Day:         data["day"],
 		Title:       data["title"],
 		Description: data["description"],
 	}
+	task.SetDay(data["day"])
+	task.SetTrack(data["track"])
 	database.DB.Model(&task).Where("id = ?", id).Updates(&task)
 
 	c.JSON(http.StatusAccepted, gin.H{"message": "Task updated successfully"})

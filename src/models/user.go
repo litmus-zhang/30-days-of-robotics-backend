@@ -1,19 +1,24 @@
 package models
 
-import "golang.org/x/crypto/bcrypt"
+import (
+	"golang.org/x/crypto/bcrypt"
+	"strconv"
+)
 
 type User struct {
-	ID        uint   `json:"id" gorm:"primaryKey"`
+	ID        uint   `json:"id"`
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
 	Email     string `json:"email" gorm:"unique"`
-	Password  string `json:"password"`
+	Password  string `json:"-"`
+	TrackID   int
+	Track     Track `json:"-"`
 }
 
-type UserTrack struct {
+type UserTask struct {
 	UserID    string `json:"user_id"`
-	TrackID   string `json:"track_id"`
 	TrackName string `json:"track_name"`
+	Tasks     []Task `json:"tasks"`
 }
 
 func (user *User) SetPassword(password string) {
@@ -24,4 +29,7 @@ func (user *User) SetPassword(password string) {
 func (user *User) ComparePassword(password string) error {
 	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	return err
+}
+func (user *User) SetTrack(track string) {
+	user.TrackID, _ = strconv.Atoi(track)
 }
