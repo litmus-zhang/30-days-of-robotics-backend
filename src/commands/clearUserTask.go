@@ -8,5 +8,4 @@ import (
 func main() {
 	database.Connect()
 	database.DB.Raw("DELETE from user_tasks WHERE track_id IN (1,2,3)").Scan(&models.UserTask{})
-
 }
