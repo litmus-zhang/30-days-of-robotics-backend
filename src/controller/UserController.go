@@ -33,4 +33,20 @@ func SubmitTask(c *gin.Context) {
 		return
 	}
 
+	userId := middlewares.GetUserId(c)
+	type Result struct {
+		ID      int
+		TrackID int
+	}
+	var result Result
+	database.DB.Raw("select id, track_id from users where id = ?", userId).Scan(&result)
+	taskID := c.Param("id")
+	userTask := models.UserTask{
+		Submitted:  true,
+		Submission: data["submission"],
+		UserID:     result.ID,
+		TrackID:    result.TrackID,
+	}
+	userTask.SetTaskID(taskID)
+	c.JSON(http.StatusAccepted, userTask)
 }

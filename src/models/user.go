@@ -16,9 +16,15 @@ type User struct {
 }
 
 type UserTask struct {
-	UserID    string `json:"user_id"`
-	TrackName string `json:"track_name"`
-	Tasks     []Task `json:"tasks"`
+	UserID     int
+	User       User `json:"-"`
+	TrackID    int
+	Track      Track `json:"-"`
+	TaskID     int
+	Task       Task   `json:"-"`
+	Submission string `json:"submission"`
+	Submitted  bool   `json:"submitted"  gorm:"default:false"`
+	Grade      uint   `json:"grade"`
 }
 
 func (user *User) SetPassword(password string) {
@@ -32,4 +38,14 @@ func (user *User) ComparePassword(password string) error {
 }
 func (user *User) SetTrack(track string) {
 	user.TrackID, _ = strconv.Atoi(track)
+}
+
+func (usertask *UserTask) SetTaskID(id string) {
+	taskID, _ := strconv.Atoi(id)
+	usertask.TaskID = taskID
+}
+func (usertask *UserTask) SetUserID(id interface{}) {
+	var userInterface interface{}
+	userInterface = id
+	usertask.UserID = userInterface.(int)
 }
