@@ -18,6 +18,8 @@ type User struct {
 type UserTask struct {
 	UserID     int
 	User       User `json:"-"`
+	GraderID   int  `json:"grader_id"`
+	Grader     User `json:"-"`
 	TrackID    int
 	Track      Track `json:"-"`
 	TaskID     int
